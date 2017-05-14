@@ -2,24 +2,18 @@
 layout: default
 ---
 
-{% include site-header.html %}
+<article class="post-container post-container--single" itemscope itemtype="http://schema.org/BlogPosting">
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="{{page.date | date: date_to_xmlschema}}" itemprop="datePublished" class="post-meta__date date">{{page.date | date: "%F"}}</time> &#8226; <span class="post-meta__tags tags">{{page.tags}}</span>
+    </div>
+    <h1 class="post-title">{{ page.title }}</h1>
+  </header>
 
-<main class="main  container">
-
-	<article class="article  article--post  content  typeset">
-
-    <h1>{{ page.title }}</h1>
-		{% include post-meta.html %}
+  <section class="post">
     {{ content }}
+  </section>
+</article>
 
-		{% include nav-share.html %}
-
-		{% include post-comments.html %}
-
-  </article>
-
-  {% include site-aside.html %}
-
-</main>
-
-{% include site-footer.html %}
+{% include read-more.html %}
+{% include comments.html %}
