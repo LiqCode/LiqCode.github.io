@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <title>内存管理</title>
+  <meta name="description" content="MRC和ARCoc对象管理分2个时代，一个是MRC，另一个是ARC。MRC时代 采用引用计数的方式，管理OC对象，需要手动释放oc对象，想想当初写代码多麻烦，很容易就写错。只记得一句非常经典的话，谁创建谁释放，包括retain,copy, alloc, new。">
+  <meta name="author" content="Wei Wang">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="内存管理">
+  <meta name="twitter:description" content="MRC和ARCoc对象管理分2个时代，一个是MRC，另一个是ARC。MRC时代 采用引用计数的方式，管理OC对象，需要手动释放oc对象，想想当初写代码多麻烦，很容易就写错。只记得一句非常经典的话，谁创建谁释放，包括retain,copy, alloc, new。">
+  
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="内存管理">
+  <meta property="og:description" content="MRC和ARCoc对象管理分2个时代，一个是MRC，另一个是ARC。MRC时代 采用引用计数的方式，管理OC对象，需要手动释放oc对象，想想当初写代码多麻烦，很容易就写错。只记得一句非常经典的话，谁创建谁释放，包括retain,copy, alloc, new。">
+  
+  <link rel="icon" type="image/png" href="/assets/images/favicon.png" />
+  <link href="/assets/images/favicon.png" rel="shortcut icon" type="image/png">
+  
+  <link rel="stylesheet" href="/css/main.css">
+  <link href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="canonical" href="http://localhost:4000/2017/05/ios-memory/">
+  <link rel="alternate" type="application/rss+xml" title="LiqCode" href="http://localhost:4000/feed.xml">
+  
+  <meta name="google-site-verification" content="1-1ZlHoRvM0T2FqPbW2S-qLgYXN6rsn52kErlMPd_gw" />
+  
+</head>
+
+
+  <body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+    
+    <header class="panel-cover panel-cover--collapsed" style="background-image: url('/assets/images/background-cover.jpg')">
+  <div class="panel-main">
+
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <a href="/#blog" title="前往 LiqCode 的主页" class="blog-button"><img src="/assets/images/avatar.jpg" width="80" alt="LiqCode logo" class="panel-cover__logo logo" /></a>
+        <h1 class="panel-cover__title panel-title"><a href="/#blog" title="link to homepage for LiqCode" class="blog-button">LiqCode</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle">个人站</span>
+        
+        <hr class="panel-cover__divider" />
+        <p class="panel-cover__description">嗨，我是李球，13年开始从事iOS开发。现居深圳，正在修行中。</p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+        
+        
+        <div class="navigation-wrapper">
+          <div>
+            <nav class="cover-navigation cover-navigation--primary">
+              <ul class="navigation">
+                <li class="navigation__item"><a href="/#blog" title="Visit blog" class="blog-button">博客</a></li>
+                
+              </ul>
+            </nav>
+          </div>
+          
+          <div><nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  
+
+  
+  <!-- Github -->
+  <li class="navigation__item">
+    <a href="https://github.com/LiqCode" title="@LiqCode 的 Github" target="_blank">
+      <i class='social fa fa-github'></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+  
+  
+  
+
+  
+
+  <!-- RSS -->
+  <li class="navigation__item">
+    <a href="/feed.xml" rel="author" title="RSS" target="_blank">
+      <i class='social fa fa-rss'></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+  
+  <!-- Email -->
+  <li class="navigation__item">
+    <a href="mailto:liqiu12314@gmail.com" title="Contact me">
+      <i class='social fa fa-envelope'></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+  
+
+  </ul>
+</nav>
+</div>
+        </div>
+      </div>
+    </div>
+    
+    
+    <div class="panel-cover--overlay cover-red"></div>
+    
+  </div>
+</header>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single" itemscope itemtype="http://schema.org/BlogPosting">
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2017-05-16 01:29:43 +0800" itemprop="datePublished" class="post-meta__date date">2017-05-16</time> &#8226; <span class="post-meta__tags tags">iOS</span>
+    </div>
+    <h1 class="post-title">内存管理</h1>
+  </header>
+
+  <section class="post">
+    <h3 id="mrc和arc">MRC和ARC</h3>
+<p>oc对象管理分2个时代，一个是MRC，另一个是ARC。
+<strong>MRC时代</strong> 采用引用计数的方式，管理OC对象，需要手动释放oc对象，想想当初写代码多麻烦，很容易就写错。
+只记得一句非常经典的话，<strong>谁创建谁释放</strong>，包括retain,copy, alloc, new。</p>
+
+<p><strong>ARC时代</strong> 记得当时苹果发布ARC时有多兴奋，瞬间感觉写代码是如此的轻松，不用管OC创建释放，开发速度加快，非常兴奋。但这些都取决于编译器的功劳，OC底层并没有发生变化，依然是引用计数，只是在编译的时候，编译器帮我们加上retain, release。</p>
+
+<h3 id="autoreleasepool">AutoReleasePool</h3>
+<p>当我们创建xcode给我们提供的模板工程的时候，你会发现在main，有一个@autoreleasepool,这就是自动释放池。用于当大量创建临时变量时，及时释放。</p>
+
+<figure class="highlight"><pre><code class="language-c" data-lang="c">    <span class="err">@</span><span class="n">autoreleasepool</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">UIApplicationMain</span><span class="p">(</span><span class="n">argc</span><span class="p">,</span> <span class="n">argv</span><span class="p">,</span> <span class="n">nil</span><span class="p">,</span> <span class="n">NSStringFromClass</span><span class="p">([</span><span class="n">AppDelegate</span> <span class="n">class</span><span class="p">]));</span>
+    <span class="p">}</span></code></pre></figure>
+
+<p>ps：<strong>整个 iOS 的应用都是包含在一个自动释放池 block 中的</strong>。</p>
+
+<p><strong>疑问</strong>：测试不使用自动释放池，循环创建临时的NSString变量，内存没有什么印象（与使用自动释放池一样），代码如下</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>for (NSInteger i = 0; i &lt; 1000000000; i++) {
+        @autoreleasepool {
+            NSString *string = @"Abc";
+            string = [string lowercaseString];
+            string = [string stringByAppendingString:@(i).stringValue];
+
+//            UIView *v = [[UIView alloc] initWithFrame:self.view.bounds]; //当加入这行时，内存暴涨
+        }
+//        NSLog(@"%@", string);
+    }
+</code></pre>
+</div>
+
+<h3 id="block循环引用">block循环引用</h3>
+
+<h3 id="c语言手动分配空间">C语言手动分配空间</h3>
+<p>堆空间：与栈不同，是需要开发人员自己管理的内存空间，分配内存空间和释放都需要自己动手。</p>
+<div class="highlighter-rouge"><pre class="highlight"><code>//分配内存
+double *p = (double *)malloc(sizeof(double *));
+
+//释放
+free(p);
+p = NULL;
+</code></pre>
+</div>
+
+<h3 id="cfcg-create对象">CF、CG create对象</h3>
+
+<h3 id="js内存管理javascriptcore">JS内存管理（JavascriptCore）</h3>
+<p>由于JS内存管理是垃圾回收，并且JS中的对象都是强引用，而OC是引用计数。如果双方互相引用，势必会造成循环引用，而导致内存泄漏。我们用<strong>JSManagedValue</strong>保存JSValue来避免</p>
+
+  </section>
+</article>
+
+<section class="read-more">
+   
+   
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">更早的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/2017/05/test/" title="link to Test">Test</a></h2>
+       <p class="excerpt">For TestHello world, this word is for testing.def show  @widget = Widget(params[:id])  respond_to do |format|    format.html # show.html.erb    format.json { render json: @widget }  endend&hellip;</p>
+       <div class="post-list__meta"><time datetime="2017-05-14 12:19:43 +0800" class="post-list__meta--date date">2017-05-14</time> &#8226; <span class="post-list__meta--tags tags">Testtag</span><a class="btn-border-small" href=/2017/05/test/>继续阅读</a></div>
+   </div>
+   
+</section>
+
+<section class="post-comments">
+  
+    <div id="disqus_thread"></div>
+    <script>
+    
+    var disqus_config = function () {
+        this.page.url = "http://localhost:4000/2017/05/ios-memory/";
+        this.page.identifier = "/2017/05/ios-memory/";
+    };
+
+    var disqus_shortname = 'LiqCode';
+    
+    (function() { // DON'T EDIT BELOW THIS LINE
+        var d = document, s = d.createElement('script');
+        s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        })();
+    </script>
+    <noscript>要查看<a href="http://disqus.com/?ref_noscript"> Disqus </a>评论，请启用 JavaScript</noscript>
+    
+  
+  
+  
+  
+</section>
+
+
+            <section class="footer">
+    <footer>
+    	<span class="footer__copyright">本站点采用<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享 署名-非商业性使用-相同方式共享 4.0 国际 许可协议</a></span>
+        <span class="footer__copyright">本站由 <a>@LiqCode</a> 创建，由 <a href="https://jekyllrb.com">Jekyll</a> 于 2017-05-16 生成</span>
+        <span class="footer__copyright">采用 <a href="https://github.com/onevcat/vno-jekyll">Vno - Jekyll</a> 作为主题，您可以在 GitHub 找到<a href="https://github.com/onevcat/OneV-s-Den">本站源码</a> - &copy; 2017</span>
+    </footer>
+</section>
+
+        </div>
+    </div>
+    
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+
+<script type="text/javascript" src="/js/main.js"></script>
+
+
+
+    
+  </body>
+
+</html>

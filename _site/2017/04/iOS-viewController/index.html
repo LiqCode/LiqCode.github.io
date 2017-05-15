@@ -6,17 +6,17 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <title>Hello World - Vno</title>
-  <meta name="description" content="What’s this">
+  <title>iOS viewcontroller</title>
+  <meta name="description" content="许久没有看过viewcontroller，由于项目原因，重新温习了下，现在整理下">
   <meta name="author" content="Wei Wang">
 
   <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="Hello World - Vno">
-  <meta name="twitter:description" content="What’s this">
+  <meta name="twitter:title" content="iOS viewcontroller">
+  <meta name="twitter:description" content="许久没有看过viewcontroller，由于项目原因，重新温习了下，现在整理下">
   
   <meta property="og:type" content="article">
-  <meta property="og:title" content="Hello World - Vno">
-  <meta property="og:description" content="What’s this">
+  <meta property="og:title" content="iOS viewcontroller">
+  <meta property="og:description" content="许久没有看过viewcontroller，由于项目原因，重新温习了下，现在整理下">
   
   <link rel="icon" type="image/png" href="/assets/images/favicon.png" />
   <link href="/assets/images/favicon.png" rel="shortcut icon" type="image/png">
@@ -24,7 +24,7 @@
   <link rel="stylesheet" href="/css/main.css">
   <link href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
 
-  <link rel="canonical" href="http://localhost:4000/2016/02/hello-world-vno/">
+  <link rel="canonical" href="http://localhost:4000/2017/04/iOS-viewController/">
   <link rel="alternate" type="application/rss+xml" title="LiqCode" href="http://localhost:4000/feed.xml">
   
   <meta name="google-site-verification" content="1-1ZlHoRvM0T2FqPbW2S-qLgYXN6rsn52kErlMPd_gw" />
@@ -122,67 +122,66 @@
             <article class="post-container post-container--single" itemscope itemtype="http://schema.org/BlogPosting">
   <header class="post-header">
     <div class="post-meta">
-      <time datetime="2016-02-16 15:32:24 +0900" itemprop="datePublished" class="post-meta__date date">2016-02-16</time> &#8226; <span class="post-meta__tags tags"></span>
+      <time datetime="2017-04-16 19:32:24 +0900" itemprop="datePublished" class="post-meta__date date">2017-04-16</time> &#8226; <span class="post-meta__tags tags"></span>
     </div>
-    <h1 class="post-title">Hello World - Vno</h1>
+    <h1 class="post-title">iOS viewcontroller</h1>
   </header>
 
   <section class="post">
-    <h4 id="whats-this">What’s this</h4>
+    <p>许久没有看过viewcontroller，由于项目原因，重新温习了下，现在整理下</p>
 
-<p><a href="https://github.com/onevcat/vno-jekyll">Vno Jekyll</a> is a theme for <a href="http://jekyllrb.com">Jekyll</a>. It is a port of my Ghost theme <a href="https://github.com/onevcat/vno">vno</a>, which is originally developed from <a href="https://github.com/daleanthony/uno">Dale Anthony’s Uno</a>.</p>
+<h3 id="生命周期">生命周期</h3>
 
-<h4 id="usage">Usage</h4>
+<p>启动到显示</p>
 
-<div class="language-bash highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>git clone https://github.com/onevcat/vno-jekyll.git your_site
-<span class="gp">$ </span><span class="nb">cd </span>your_site
-<span class="gp">$ </span>bundler install
-<span class="gp">$ </span>bundler <span class="nb">exec </span>jekyll serve
+<ul>
+  <li>init</li>
+  <li>willMoveToParentViewController</li>
+  <li>loadView</li>
+  <li>viewDidLoad</li>
+  <li>viewWillAppear</li>
+  <li>updateViewConstraints</li>
+  <li>viewWillLayoutSubviews</li>
+  <li>viewDidLayoutSubviews</li>
+  <li>viewDidAppear</li>
+</ul>
+
+<p>退出到销毁</p>
+
+<ul>
+  <li>didMoveToParentViewController</li>
+  <li>viewWillDisappear</li>
+  <li>viewDidDisappear</li>
+  <li>dealloc</li>
+</ul>
+
+<p>作为子控制，加入到父控制器上，分三步，周期如下</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>OneViewController *one = [[OneViewController alloc] init];
+* init
+
+[self addChildViewController:vc];
+* willMoveToParentViewController
+* loadView
+* viewDidLoad
+
+[self.view addSubview:vc.view];
+* viewWillAppear
+* updateViewConstraints
+* viewWillLayoutSubviews
+* viewDidLayoutSubviews
+* viewDidAppear
+
 </code></pre>
 </div>
+<h3 id="响应链">响应链</h3>
 
-<p>Your site with <code class="highlighter-rouge">Vno Jekyll</code> enabled should be accessible in http://127.0.0.1:4000.</p>
+<p>//是否响应该手势，但只要手势开始调用，用于确定响应的view，与GestureRecongizer一样</p>
+<ul>
+  <li>hitTest:withEvent</li>
+  <li>pointInside:withEvent</li>
+</ul>
 
-<p>For more information about Jekyll, please visit <a href="http://jekyllrb.com">Jekyll’s site</a>.</p>
-
-<h4 id="configuration">Configuration</h4>
-
-<p>All configuration could be done in <code class="highlighter-rouge">_config.yml</code>. Remember you need to restart to serve the page when after changing the config file. Everything in the config file should be self-explanatory.</p>
-
-<h4 id="background-image-and-avatar">Background image and avatar</h4>
-
-<p>You could replace the background and avatar image in <code class="highlighter-rouge">assets/images</code> folder to change them.</p>
-
-<h4 id="sites-using-vno">Sites using Vno</h4>
-
-<p><a href="http://onevcat.com">My blog</a> is using <code class="highlighter-rouge">Vno Jekyll</code> as well, you could see how it works in real. There are some other sites using the same theme. You can find them below:</p>
-
-<table>
-  <thead>
-    <tr>
-      <th>Site Name</th>
-      <th>URL</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>OneV’s Den</td>
-      <td><a href="http://onevcat.com">http://onevcat.com</a></td>
-    </tr>
-    <tr>
-      <td>July Tang</td>
-      <td><a href="http://onevcat.com">http://blog.julytang.xyz</a></td>
-    </tr>
-  </tbody>
-</table>
-
-<blockquote>
-  <p>If you happen to be using this theme, welcome to <a href="https://github.com/onevcat/vno-jekyll/pulls">send me a pull request</a> to add your site link here. :)</p>
-</blockquote>
-
-<h4 id="license">License</h4>
-
-<p>Great thanks to <a href="https://github.com/daleanthony">Dale Anthony</a> and his <a href="https://github.com/daleanthony/uno">Uno</a>. Vno Jekyll is based on Uno, and contains a lot of modification on page layout, animation, font and some more things I can not remember. Vno Jekyll is followed with Uno and be licensed as <a href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International</a>. See the link for more information.</p>
 
   </section>
 </article>
@@ -192,20 +191,12 @@
    
    <div class="read-more-item">
        <span class="read-more-item-dim">最近的文章</span>
-       <h2 class="post-list__post-title post-title"><a href="/2017/05/test/" title="link to Test">Test</a></h2>
-       <p class="excerpt">For TestHello world, this word is for testing.{{ excerpt_separator }}{% highlight ruby %}def show  @widget = Widget(params[:id])  respond_to do |format|    format.html # show.html.erb    format.json { render json: @widget }  endend{% endhighlight %}&hellip;</p>
-       <div class="post-list__meta"><time datetime="2017-05-14 12:19:43 +0800" class="post-list__meta--date date">2017-05-14</time> &#8226; <span class="post-list__meta--tags tags">Testtag</span><a class="btn-border-small" href=/2017/05/test/>继续阅读</a></div>
+       <h2 class="post-list__post-title post-title"><a href="/2017/05/dp-base/" title="link to 动态规划（DP)">动态规划（DP)</a></h2>
+       <p class="excerpt">基本概念动态规划：每次决策依赖于当前状态，又随即引起状态的状态转移，一个决策序列就是在变化的状态中产生出来的，这样多阶段最优化决策解决问题的过程。基本思想与策略基本思路：将待求解的问题分成若干个子问题（阶段），按顺序求解子阶段，前一子问题的解，为后一子问题的求解提供了有用的信息。在求解任一子问题时，列出各种可能的局部解，通过决策保留那些有可能达到最优的局部解，丢弃其他局部解。依次解决各个子问题，最后一个子问题就是初始问题的解。由于动态规划解决问题多数有重叠子问题这个特点，为了减少重复计算，...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2017-05-10 15:32:24 +0800" class="post-list__meta--date date">2017-05-10</time> &#8226; <span class="post-list__meta--tags tags"></span><a class="btn-border-small" href=/2017/05/dp-base/>继续阅读</a></div>
    </div>
    
    
-   
-   
-   <div class="read-more-item">
-       <span class="read-more-item-dim">更早的文章</span>
-       <h2 class="post-list__post-title post-title"><a href="/2016/02/sample-post/" title="link to Sample Post">Sample Post</a></h2>
-       <p class="excerpt">You’ll find this post in your _posts directory. Go ahead and edit it and re-build the site to see your changes. You can rebuild the site in many different ways, but the most common way is to run jekyll serve, which launches a web server and auto-r...&hellip;</p>
-       <div class="post-list__meta"><time datetime="2016-02-15 15:32:24 +0900" class="post-list__meta--date date">2016-02-15</time> &#8226; <span class="post-list__meta--tags tags"></span><a class="btn-border-small" href=/2016/02/sample-post/>继续阅读</a></div>
-   </div>
    
 </section>
 
@@ -215,8 +206,8 @@
     <script>
     
     var disqus_config = function () {
-        this.page.url = "http://localhost:4000/2016/02/hello-world-vno/";
-        this.page.identifier = "/2016/02/hello-world-vno/";
+        this.page.url = "http://localhost:4000/2017/04/iOS-viewController/";
+        this.page.identifier = "/2017/04/iOS-viewController/";
     };
 
     var disqus_shortname = 'LiqCode';
@@ -240,7 +231,7 @@
             <section class="footer">
     <footer>
     	<span class="footer__copyright">本站点采用<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享 署名-非商业性使用-相同方式共享 4.0 国际 许可协议</a></span>
-        <span class="footer__copyright">本站由 <a>@LiqCode</a> 创建，由 <a href="https://jekyllrb.com">Jekyll</a> 于 2017-05-14 生成</span>
+        <span class="footer__copyright">本站由 <a>@LiqCode</a> 创建，由 <a href="https://jekyllrb.com">Jekyll</a> 于 2017-05-16 生成</span>
         <span class="footer__copyright">采用 <a href="https://github.com/onevcat/vno-jekyll">Vno - Jekyll</a> 作为主题，您可以在 GitHub 找到<a href="https://github.com/onevcat/OneV-s-Den">本站源码</a> - &copy; 2017</span>
     </footer>
 </section>

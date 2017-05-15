@@ -124,6 +124,13 @@
   <ol class="post-list">
     
     <li>
+      <h2 class="post-list__post-title post-title"><a href="/2017/05/ios-memory/" title="访问 内存管理">内存管理</a></h2>
+      <p class="excerpt">MRC和ARCoc对象管理分2个时代，一个是MRC，另一个是ARC。MRC时代 采用引用计数的方式，管理OC对象，需要手动释放oc对象，想想当初写代码多麻烦，很容易就写错。只记得一句非常经典的话，谁创建谁释放，包括retain,copy, alloc, new。ARC时代 记得当时苹果发布ARC时有多兴奋，瞬间感觉写代码是如此的轻松，不用管OC创建释放，开发速度加快，非常兴奋。但这些都取决于编译器的功劳，OC底层并没有发生变化，依然是引用计数，只是在编译的时候，编译器帮我们加上retain...&hellip;</p>
+      <div class="post-list__meta"><time datetime="2017-05-16 01:29:43 +0800" class="post-list__meta--date date">2017-05-16</time> &#8226; <span class="post-list__meta--tags tags">iOS</span><a class="btn-border-small" href=/2017/05/ios-memory/>继续阅读</a></div>
+      <hr class="post-list__divider" />
+    </li>
+    
+    <li>
       <h2 class="post-list__post-title post-title"><a href="/2017/05/test/" title="访问 Test">Test</a></h2>
       <p class="excerpt">For TestHello world, this word is for testing.def show  @widget = Widget(params[:id])  respond_to do |format|    format.html # show.html.erb    format.json { render json: @widget }  endend&hellip;</p>
       <div class="post-list__meta"><time datetime="2017-05-14 12:19:43 +0800" class="post-list__meta--date date">2017-05-14</time> &#8226; <span class="post-list__meta--tags tags">Testtag</span><a class="btn-border-small" href=/2017/05/test/>继续阅读</a></div>
@@ -131,16 +138,16 @@
     </li>
     
     <li>
-      <h2 class="post-list__post-title post-title"><a href="/2016/02/hello-world-vno/" title="访问 Hello World - Vno">Hello World - Vno</a></h2>
-      <p class="excerpt">What’s thisVno Jekyll is a theme for Jekyll. It is a port of my Ghost theme vno, which is originally developed from Dale Anthony’s Uno.Usage$ git clone https://github.com/onevcat/vno-jekyll.git your_site$ cd your_site$ bundler install$ bundler exe...&hellip;</p>
-      <div class="post-list__meta"><time datetime="2016-02-16 15:32:24 +0900" class="post-list__meta--date date">2016-02-16</time> &#8226; <span class="post-list__meta--tags tags"></span><a class="btn-border-small" href=/2016/02/hello-world-vno/>继续阅读</a></div>
+      <h2 class="post-list__post-title post-title"><a href="/2017/05/dp-base/" title="访问 动态规划（DP)">动态规划（DP)</a></h2>
+      <p class="excerpt">基本概念动态规划：每次决策依赖于当前状态，又随即引起状态的状态转移，一个决策序列就是在变化的状态中产生出来的，这样多阶段最优化决策解决问题的过程。基本思想与策略基本思路：将待求解的问题分成若干个子问题（阶段），按顺序求解子阶段，前一子问题的解，为后一子问题的求解提供了有用的信息。在求解任一子问题时，列出各种可能的局部解，通过决策保留那些有可能达到最优的局部解，丢弃其他局部解。依次解决各个子问题，最后一个子问题就是初始问题的解。由于动态规划解决问题多数有重叠子问题这个特点，为了减少重复计算，...&hellip;</p>
+      <div class="post-list__meta"><time datetime="2017-05-10 15:32:24 +0800" class="post-list__meta--date date">2017-05-10</time> &#8226; <span class="post-list__meta--tags tags"></span><a class="btn-border-small" href=/2017/05/dp-base/>继续阅读</a></div>
       <hr class="post-list__divider" />
     </li>
     
     <li>
-      <h2 class="post-list__post-title post-title"><a href="/2016/02/sample-post/" title="访问 Sample Post">Sample Post</a></h2>
-      <p class="excerpt">You’ll find this post in your _posts directory. Go ahead and edit it and re-build the site to see your changes. You can rebuild the site in many different ways, but the most common way is to run jekyll serve, which launches a web server and auto-r...&hellip;</p>
-      <div class="post-list__meta"><time datetime="2016-02-15 15:32:24 +0900" class="post-list__meta--date date">2016-02-15</time> &#8226; <span class="post-list__meta--tags tags"></span><a class="btn-border-small" href=/2016/02/sample-post/>继续阅读</a></div>
+      <h2 class="post-list__post-title post-title"><a href="/2017/04/iOS-viewController/" title="访问 iOS viewcontroller">iOS viewcontroller</a></h2>
+      <p class="excerpt">许久没有看过viewcontroller，由于项目原因，重新温习了下，现在整理下生命周期启动到显示  init  willMoveToParentViewController  loadView  viewDidLoad  viewWillAppear  updateViewConstraints  viewWillLayoutSubviews  viewDidLayoutSubviews  viewDidAppear退出到销毁  didMoveToParentViewController...&hellip;</p>
+      <div class="post-list__meta"><time datetime="2017-04-16 19:32:24 +0900" class="post-list__meta--date date">2017-04-16</time> &#8226; <span class="post-list__meta--tags tags"></span><a class="btn-border-small" href=/2017/04/iOS-viewController/>继续阅读</a></div>
       <hr class="post-list__divider" />
     </li>
     
@@ -160,7 +167,7 @@
             <section class="footer">
     <footer>
     	<span class="footer__copyright">本站点采用<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享 署名-非商业性使用-相同方式共享 4.0 国际 许可协议</a></span>
-        <span class="footer__copyright">本站由 <a>@LiqCode</a> 创建，由 <a href="https://jekyllrb.com">Jekyll</a> 于 2017-05-14 生成</span>
+        <span class="footer__copyright">本站由 <a>@LiqCode</a> 创建，由 <a href="https://jekyllrb.com">Jekyll</a> 于 2017-05-16 生成</span>
         <span class="footer__copyright">采用 <a href="https://github.com/onevcat/vno-jekyll">Vno - Jekyll</a> 作为主题，您可以在 GitHub 找到<a href="https://github.com/onevcat/OneV-s-Den">本站源码</a> - &copy; 2017</span>
     </footer>
 </section>
