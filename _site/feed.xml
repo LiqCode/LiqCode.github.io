@@ -5,21 +5,23 @@
     <description>嗨，我是李球，13年开始从事iOS开发。现居深圳，正在修行中。</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Tue, 16 May 2017 03:36:15 +0800</pubDate>
-    <lastBuildDate>Tue, 16 May 2017 03:36:15 +0800</lastBuildDate>
+    <pubDate>Wed, 17 May 2017 00:37:04 +0800</pubDate>
+    <lastBuildDate>Wed, 17 May 2017 00:37:04 +0800</lastBuildDate>
     <generator>Jekyll v3.4.0</generator>
     
       <item>
         <title>内存管理</title>
-        <description>&lt;h3 id=&quot;mrc和arc&quot;&gt;MRC和ARC&lt;/h3&gt;
+        <description>&lt;p&gt;申明：本文由LiqCode原创，转载请声明出处。&lt;/p&gt;
+
+&lt;h3 id=&quot;mrc和arc&quot;&gt;MRC和ARC&lt;/h3&gt;
 &lt;p&gt;oc对象管理分2个时代，一个是MRC，另一个是ARC。
 &lt;strong&gt;MRC时代&lt;/strong&gt; 采用引用计数的方式，管理OC对象，需要手动释放oc对象，想想当初写代码多麻烦，很容易就写错。
 只记得一句非常经典的话，&lt;strong&gt;谁创建谁释放&lt;/strong&gt;，包括retain,copy, alloc, new。&lt;/p&gt;
 
-&lt;p&gt;&lt;strong&gt;ARC时代&lt;/strong&gt; 记得当时苹果发布ARC时有多兴奋，瞬间感觉写代码是如此的轻松，不用管OC创建释放，开发速度加快，非常兴奋。但这些都取决于编译器的功劳，OC底层并没有发生变化，依然是引用计数，只是在编译的时候，编译器帮我们加上retain, release。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;ARC时代&lt;/strong&gt; 记得当时苹果发布ARC时有多兴奋，不在需要管OC创建释放，开发速度瞬间提升。但这些都取决于编译器的功劳，OC底层并没有发生变化，依然是引用计数，只是在编译的时候，编译器帮我们加上retain, release。&lt;/p&gt;
 
 &lt;h3 id=&quot;autoreleasepool&quot;&gt;AutoReleasePool&lt;/h3&gt;
-&lt;p&gt;当我们创建xcode给我们提供的模板工程的时候，你会发现在main，有一个@autoreleasepool,这就是自动释放池。用于当大量创建临时变量时，及时释放。&lt;/p&gt;
+&lt;p&gt;当我们创建xcode给我们提供的模板工程的时候，你会发现在main，有一个@autoreleasepool,这就是自动释放池。用于当大量创建临时变量时，及时释放内存。&lt;/p&gt;
 
 &lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-c&quot; data-lang=&quot;c&quot;&gt;    &lt;span class=&quot;err&quot;&gt;@&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;autoreleasepool&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
         &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;UIApplicationMain&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;argc&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;argv&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;nil&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;NSStringFromClass&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;([&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;AppDelegate&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;class&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]));&lt;/span&gt;
@@ -42,7 +44,33 @@
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 
-&lt;h3 id=&quot;block循环引用&quot;&gt;block循环引用&lt;/h3&gt;
+&lt;h3 id=&quot;nstimer&quot;&gt;NSTimer&lt;/h3&gt;
+&lt;p&gt;对于NSTimer，有个我们经常忽略的问题，它会保留其目标对象。如果NSTimer不停重复执行的话，直到开发者稍后手动关闭为止。由于计时器会保留目标对象，如果不手动取消计时器，目标对象是不会释放的，很容易形成“保留环”。&lt;/p&gt;
+
+&lt;p&gt;解决方法：开发者手动关闭计时器。&lt;/p&gt;
+
+&lt;h3 id=&quot;循环引用&quot;&gt;循环引用&lt;/h3&gt;
+&lt;p&gt;循环引用，其实就是对象之间互相引用，形成闭环，有点类似互锁。&lt;/p&gt;
+
+&lt;h4 id=&quot;block循环引用&quot;&gt;block循环引用&lt;/h4&gt;
+&lt;p&gt;Block循环引用的问题已是老生常谈，Block是将外部对象copy给自己一份，而且只是浅拷贝。在没有加修饰的情况下（__block、__weak），对于OC对象来说，就是引用计数加一，对于基础数据类型（int，float，bool）就是直接copy。
+所以当一个对象拥有block，而block又copy了这个对象，就会出现“保留环”&lt;/p&gt;
+
+&lt;p&gt;解决办法：对象前面加加上修饰 “__weak”, 但需要注意的是，block作为回调时，如果多个线程同时操作该对象，__weak对象会在执行到block一半时，可能会被释放，继续执行可能会有问题。所以在block里面第一行，就用“__strong”重新修饰。 示例代码如下（基于RAC框架封装）：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;@weakify(self); //相当于 __weak typeof(self) weakself = self;
+void ^(block)() = ^{
+  @strongify(self); //相当于 __strong typeof(weakself) self = weakself;
+};
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h4 id=&quot;delegate循环引用&quot;&gt;delegate循环引用&lt;/h4&gt;
+&lt;p&gt;delegate循环引用问题比较基础，只需注意将代理属性修饰为weak即可&lt;/p&gt;
+
+&lt;h4 id=&quot;如何判断循环引用&quot;&gt;如何判断循环引用&lt;/h4&gt;
+&lt;p&gt;简单粗暴实用的方法就是在delloc方法中，加个断点，看是否能正常释放。&lt;/p&gt;
 
 &lt;h3 id=&quot;c语言手动分配空间&quot;&gt;C语言手动分配空间&lt;/h3&gt;
 &lt;p&gt;堆空间：与栈不同，是需要开发人员自己管理的内存空间，分配内存空间和释放都需要自己动手。&lt;/p&gt;
@@ -55,10 +83,30 @@ p = NULL;
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 
-&lt;h3 id=&quot;cfcg-create对象&quot;&gt;CF、CG create对象&lt;/h3&gt;
-
 &lt;h3 id=&quot;js内存管理javascriptcore&quot;&gt;JS内存管理（JavascriptCore）&lt;/h3&gt;
 &lt;p&gt;由于JS内存管理是垃圾回收，并且JS中的对象都是强引用，而OC是引用计数。如果双方互相引用，势必会造成循环引用，而导致内存泄漏。我们用&lt;strong&gt;JSManagedValue&lt;/strong&gt;保存JSValue来避免&lt;/p&gt;
+
+&lt;h3 id=&quot;野指针&quot;&gt;野指针&lt;/h3&gt;
+&lt;p&gt;当我们使用assign修饰一个属性变量时，它的赋值是不会改变引用计数，与weak相同，但是与weak也有一个差别，当这个变量指向对象的计数为0，被清除时，weak修饰的指针值会置空，assign修饰的不会，指向一片未知区域，成为一个“野指针”，如果运气好，指向地址的内存数据没被清，app还可以跑，否则就会carsh.&lt;/p&gt;
+
+&lt;p&gt;解决办法：修饰OC对象时，请避免使用“assign”，有weak替代。
+ps：ios中UITableView中delegate以前的版本就是assign，在特定的情况下引发carsh。后面应该是苹果发现了，统一改成weak。&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;@property&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;nonatomic&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;weak&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;people&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;man&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h3 id=&quot;cfctcg对象&quot;&gt;CF、CT、CG对象&lt;/h3&gt;
+&lt;p&gt;使用过iOS底层框架时，常常会看到带有含create创建方法，创建CF、CG对象，这些就需要我们手动释放内存，如果没有手动释放，可以通过leak内存检测工具查出来。示例代码：&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;CGImageRef imageRef = CGImageCreateWithImageInRect(imageRef, myImageRect); //创建
+CGImageRelease(imageRef); //释放
+
+CTFontRef ctFont = CTFontCreateWithName((__bridge CFStringRef) self.font.fontName, self.font.pointSize, NULL);
+CFRelease(ctFont);
+
+CGMutablePathRef trackPath = CGPathCreateMutable();
+CGPathRelease(trackPath);
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 </description>
         <pubDate>Tue, 16 May 2017 01:29:43 +0800</pubDate>
         <link>http://localhost:4000/2017/05/ios-memory/</link>
