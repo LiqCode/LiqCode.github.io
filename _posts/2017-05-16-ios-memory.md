@@ -68,17 +68,6 @@ delegate循环引用问题比较基础，只需注意将代理属性修饰为wea
 #### 如何判断循环引用
 简单粗暴实用的方法就是在delloc方法中，加个断点，看是否能正常释放。
 
-### C语言手动分配空间
-堆空间：与栈不同，是需要开发人员自己管理的内存空间，分配内存空间和释放都需要自己动手。
-```
-//分配内存
-double *p = (double *)malloc(sizeof(double *));
-
-//释放
-free(p);
-p = NULL;
-```
-
 ### JS内存管理（JavascriptCore）
 由于JS内存管理是垃圾回收，并且JS中的对象都是强引用，而OC是引用计数。如果双方互相引用，势必会造成循环引用，而导致内存泄漏。我们用**JSManagedValue**保存JSValue来避免
 
@@ -102,4 +91,25 @@ CFRelease(ctFont);
 
 CGMutablePathRef trackPath = CGPathCreateMutable();
 CGPathRelease(trackPath);
+```
+### C语言手动分配空间
+堆空间：与栈不同，是需要开发人员自己管理的内存空间，分配内存空间和释放都需要自己动手。
+```
+//分配内存
+double *p = (double *)malloc(sizeof(double *));
+
+//释放
+free(p);
+p = NULL;
+```
+
+### C++ new
+
+```
+double *p = new double;
+
+delete p;
+
+double *p = new double[10];
+delete [] p;
 ```
