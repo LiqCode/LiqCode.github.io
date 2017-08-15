@@ -7,9 +7,7 @@ categories: 区块链
 ---
 申明：本文由LiqCode原创，转载请声明出处。
 
-
-# 以太坊环境搭建for mac（geth、solidity、testrpc、truffle）
-
+关键词：geth、solidity、testrpc、truffle
 
 ### pip安装
 Python有两个著名的包管理工具easy_install.py和pip。在Python2.7的安装包中，easy_install.py是默认安装的，而pip需要我们手动安装，[安装介绍](https://pip.pypa.io/en/latest/installing/#id7)。
