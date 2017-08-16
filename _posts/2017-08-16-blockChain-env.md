@@ -29,6 +29,16 @@ sudo npm install -g solc
 sudo npm install -g solc-cli
 ```
 
+如果安装过程中出现下列警告
+```
+solc-cli@^0.3.0 requires a peer of solc@^0.3.5 but none was installed
+```
+可使用下列命令，指定solc版本安装。
+```
+sudo npm -g install solc@^0.3.5 solc-cli --save-dev
+```
+
+
 ### 安装ethereum/cpp-ethereum(以太坊客户端geth)
 ```
 brew tap ethereum/ethereum
